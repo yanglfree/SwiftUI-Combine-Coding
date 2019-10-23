@@ -8,29 +8,7 @@
 
 import SwiftUI
 
-//class Settings: ObservableObject {
-//
-//    enum AccountBehavior: CaseIterable{
-//        case register, login
-//    }
-//
-//    enum Sorting: CaseIterable{
-//        case id, name, color, favorite
-//    }
-//
-//    @Published var accountBehavior = AccountBehavior.login
-//    @Published var email = ""
-//    @Published var password = ""
-//    @Published var verifyPassword = ""
-//
-//    @Published var showEnglishName = true
-//    @Published var sorting = Sorting.id
-//    @Published var showFavoriteOnly = false
-//}
-
 struct SettingView: View {
-    
-//    @ObservedObject var settings = Settings()
     
     @EnvironmentObject var store: Store
     
@@ -47,6 +25,9 @@ struct SettingView: View {
             accountSection
             optionSection
             actionSection
+        }
+        .alert(item: settingsBinding.loginError) { error in
+            Alert(title: Text(error.localizedDescription))
         }
     }
     
@@ -69,11 +50,15 @@ struct SettingView: View {
                     SecureField("确认密码", text: settingsBinding.verifyPassword)
                 }
                 
+                if settings.loginRequesting{
+                    Text("登录中...")
+                }else{
+                
                 Button(settings.accountBehavior.text){
-                    print("登录/注册")
                     self.store.dispatch(
                         .login(email: self.settings.email, password: self.settings.password)
                     )
+                }
                 }
             }else{
                 Text(settings.loginUser!.email)

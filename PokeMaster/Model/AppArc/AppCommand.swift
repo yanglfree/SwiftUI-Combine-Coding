@@ -23,11 +23,22 @@ struct LoginAppCommand: AppCommand {
             .sink(receiveCompletion: { complete in
                 
                 if case .failure(let error) = complete{
-                    
+                    store.dispatch(.accountBehaviorDone(result: .failure(error)))
                 }
                 
             }, receiveValue: { user in
-                
+                store.dispatch(.accountBehaviorDone(result: .success(user)))
             })
+    }
+}
+
+
+struct WriteUserAppCommand: AppCommand {
+    let user: User
+    func excute(in store: Store) {
+        try? FileHelper.writeJSON(
+            user,
+            to: .documentDirectory,
+            fileName: "user.json")
     }
 }

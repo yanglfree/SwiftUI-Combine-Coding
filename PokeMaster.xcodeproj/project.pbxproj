@@ -101,6 +101,7 @@
 		E1A8144223599B3300E8C719 /* PokemonInfoPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1A8144123599B3300E8C719 /* PokemonInfoPanel.swift */; };
 		E1C11A73235E9DCF00E60E04 /* PokemonInfoPanelAbilityList.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1C11A72235E9DCF00E60E04 /* PokemonInfoPanelAbilityList.swift */; };
 		E1C11A75235E9FB900E60E04 /* PokemonInfoPanelHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1C11A74235E9FB900E60E04 /* PokemonInfoPanelHeader.swift */; };
+		E1D4E5B123619CF30027B1C8 /* EmailCheckingRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1D4E5B023619CF30027B1C8 /* EmailCheckingRequest.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -200,6 +201,7 @@
 		E1A8144123599B3300E8C719 /* PokemonInfoPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonInfoPanel.swift; sourceTree = "<group>"; };
 		E1C11A72235E9DCF00E60E04 /* PokemonInfoPanelAbilityList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonInfoPanelAbilityList.swift; sourceTree = "<group>"; };
 		E1C11A74235E9FB900E60E04 /* PokemonInfoPanelHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonInfoPanelHeader.swift; sourceTree = "<group>"; };
+		E1D4E5B023619CF30027B1C8 /* EmailCheckingRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailCheckingRequest.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -423,6 +425,7 @@
 				E178DC0D23606423007FF8A6 /* LoginRequest.swift */,
 				E178DC0F2360646A007FF8A6 /* AppError.swift */,
 				E178DC12236069EE007FF8A6 /* AppCommand.swift */,
+				E1D4E5B023619CF30027B1C8 /* EmailCheckingRequest.swift */,
 			);
 			path = AppArc;
 			sourceTree = "<group>";
@@ -614,6 +617,7 @@
 				E178DC0823604C9C007FF8A6 /* AppState.swift in Sources */,
 				D1320B1923178614006F02A6 /* AbilityViewModel.swift in Sources */,
 				E178DBF9235EB248007FF8A6 /* SettingView.swift in Sources */,
+				E1D4E5B123619CF30027B1C8 /* EmailCheckingRequest.swift in Sources */,
 				D1320B1E23178614006F02A6 /* PokemonSpecies.swift in Sources */,
 				E178DBFF236048C7007FF8A6 /* MainTab.swift in Sources */,
 				D1320B2023178614006F02A6 /* ContentView.swift in Sources */,

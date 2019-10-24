@@ -35,7 +35,7 @@ struct SettingView: View {
         Section(header: Text("账户")) {
             if settings.loginUser == nil{
                 Picker(
-                    selection: settingsBinding.accountBehavior,
+                    selection: settingsBinding.checker.accountBehavior,
                     label: Text(""))
                 {
                     ForEach(AppState.Settings.AccountBehavior.allCases, id: \.self){
@@ -43,20 +43,20 @@ struct SettingView: View {
                     }
                 }.pickerStyle(SegmentedPickerStyle())
                 
-                TextField("电子邮箱", text: settingsBinding.email)
-                SecureField("密码", text: settingsBinding.password)
+                TextField("电子邮箱", text: settingsBinding.checker.email)
+                SecureField("密码", text: settingsBinding.checker.password)
                 
-                if settings.accountBehavior == .register{
-                    SecureField("确认密码", text: settingsBinding.verifyPassword)
+                if settings.checker.accountBehavior == .register{
+                    SecureField("确认密码", text: settingsBinding.checker.verifyPassword)
                 }
                 
                 if settings.loginRequesting{
                     Text("登录中...")
                 }else{
                 
-                Button(settings.accountBehavior.text){
+                    Button(settings.checker.accountBehavior.text){
                     self.store.dispatch(
-                        .login(email: self.settings.email, password: self.settings.password)
+                        .login(email: self.settings.checker.email, password: self.settings.checker.password)
                     )
                 }
                 }
@@ -72,7 +72,6 @@ struct SettingView: View {
     var optionSection: some View{
         
         Section(header: Text("选项")){
-            
             Toggle(isOn: settingsBinding.showEnglishName){
                 Text("显示英文名")
             }

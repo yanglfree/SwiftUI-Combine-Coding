@@ -102,6 +102,7 @@
 		E1C11A73235E9DCF00E60E04 /* PokemonInfoPanelAbilityList.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1C11A72235E9DCF00E60E04 /* PokemonInfoPanelAbilityList.swift */; };
 		E1C11A75235E9FB900E60E04 /* PokemonInfoPanelHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1C11A74235E9FB900E60E04 /* PokemonInfoPanelHeader.swift */; };
 		E1D4E5B123619CF30027B1C8 /* EmailCheckingRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1D4E5B023619CF30027B1C8 /* EmailCheckingRequest.swift */; };
+		E1D4E5B32362D3ED0027B1C8 /* DisposeBag.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1D4E5B22362D3ED0027B1C8 /* DisposeBag.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -202,6 +203,7 @@
 		E1C11A72235E9DCF00E60E04 /* PokemonInfoPanelAbilityList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonInfoPanelAbilityList.swift; sourceTree = "<group>"; };
 		E1C11A74235E9FB900E60E04 /* PokemonInfoPanelHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonInfoPanelHeader.swift; sourceTree = "<group>"; };
 		E1D4E5B023619CF30027B1C8 /* EmailCheckingRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailCheckingRequest.swift; sourceTree = "<group>"; };
+		E1D4E5B22362D3ED0027B1C8 /* DisposeBag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisposeBag.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -426,6 +428,7 @@
 				E178DC0F2360646A007FF8A6 /* AppError.swift */,
 				E178DC12236069EE007FF8A6 /* AppCommand.swift */,
 				E1D4E5B023619CF30027B1C8 /* EmailCheckingRequest.swift */,
+				E1D4E5B22362D3ED0027B1C8 /* DisposeBag.swift */,
 			);
 			path = AppArc;
 			sourceTree = "<group>";
@@ -622,6 +625,7 @@
 				E178DBFF236048C7007FF8A6 /* MainTab.swift in Sources */,
 				D1320B2023178614006F02A6 /* ContentView.swift in Sources */,
 				D1320B1A23178614006F02A6 /* PokemonViewModel.swift in Sources */,
+				E1D4E5B32362D3ED0027B1C8 /* DisposeBag.swift in Sources */,
 				E178DC0423604AA4007FF8A6 /* SettingRootView.swift in Sources */,
 				E178DC0C23605B16007FF8A6 /* AppAction.swift in Sources */,
 				E1A8144223599B3300E8C719 /* PokemonInfoPanel.swift in Sources */,

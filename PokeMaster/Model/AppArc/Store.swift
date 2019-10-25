@@ -12,6 +12,19 @@ import Combine
 class Store: ObservableObject {
     @Published var appState = AppState()
     
+    let disposeBag = DisposeBag()
+    
+    init() {
+        setupObservers()
+    }
+    
+    func setupObservers(){
+        disposeBag.add(appState.settings.checker.isEmailValid.sink{ isValid in
+            self.dispatch(.emailValid(valid: isValid))
+        }
+    )
+    }
+    
     static func reduce(state: AppState, action: AppAction) -> (AppState, AppCommand?){
         var appState = state
         var appCommand: AppCommand?
@@ -38,6 +51,9 @@ class Store: ObservableObject {
 //                let user = User(email: email, favoritePokemonIDs: [])
 //                appState.settings.loginUser = user
 //            }
+            
+        case .emailValid(let valid):
+            appState.settings.isEmailValid = valid
         }
         return (appState, appCommand)
     }

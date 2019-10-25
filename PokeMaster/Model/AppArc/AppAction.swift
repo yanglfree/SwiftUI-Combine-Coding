@@ -12,4 +12,6 @@ enum AppAction {
     case login(email: String, password: String)
     
     case accountBehaviorDone(result: Result<User, AppError>)
+    
+    case emailValid(valid: Bool)
 }

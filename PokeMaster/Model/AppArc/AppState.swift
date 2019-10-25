@@ -26,6 +26,8 @@ extension AppState{
         var sorting = Sorting.id
         var showFavoriteOnly = false
 
+        var isEmailValid: Bool = false
+        
         class AccountChecker{
             @Published var accountBehavior = AccountBehavior.login
             @Published var email = ""
@@ -40,18 +42,28 @@ extension AppState{
                         let validEmail = email.isValidEmailAddress
                         let canSkip = self.accountBehavior == .login
                         
-                        switch(validEmail, canSkip){
+                        switch (validEmail, canSkip){
                         case (false, _):
+                            //邮箱检验失败
                             return Just(false).eraseToAnyPublisher()
                         case (true, false):
+                            //联网校验
                             return EmailCheckingRequest(email: email)
-                            .publisher
-                            .eraseToAnyPublisher()
+                                .publisher
+                                .eraseToAnyPublisher()
                         case (true, true):
+                            //校验成功
                             return Just(true).eraseToAnyPublisher()
                         }
-                }
-                return
+                    }
+                
+                let emailLocalValid = $email.map { $0.isValidEmailAddress}
+                
+                let canSkipRemoteVerify = $accountBehavior.map{ $0 == .login}
+                
+                return Publishers.CombineLatest3(emailLocalValid, canSkipRemoteVerify, remoteVerify)
+                    .map{ $0 && ($1 || $2)}
+                    .eraseToAnyPublisher()
             }
         }
         

@@ -11,7 +11,7 @@ import SwiftUI
 struct MainTab: View {
     var body: some View {
         TabView{
-            PokemonList().tabItem {
+            PokemonRootView().tabItem {
                 Image(systemName: "list.bullet.below.rectangle")
                 Text("列表")
             }

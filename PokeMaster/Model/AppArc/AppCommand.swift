@@ -42,3 +42,16 @@ struct WriteUserAppCommand: AppCommand {
             fileName: "user.json")
     }
 }
+
+struct LoadPokemonsCommand: AppCommand {
+    func excute(in store: Store) {
+        _ = LoadPokemonRequest.all
+            .sink(receiveCompletion: { complete in
+                if case .failure(let error) = complete{
+                    store.dispatch(.loadPokemonsDone(result: .failure(error)))
+                }
+            }, receiveValue: { value in
+                store.dispatch(.loadPokemonsDone(result: .success(value)))
+            })
+    }
+}

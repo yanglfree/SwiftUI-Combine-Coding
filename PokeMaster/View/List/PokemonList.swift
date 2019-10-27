@@ -9,14 +9,12 @@
 import SwiftUI
 
 struct PokemonList: View {
+    
+    @EnvironmentObject var store: Store
+    
     var body: some View {
-        //        List(PokemonViewModel.all){pokemon in
-        //            PokemonInfoRow(model: pokemon, expanded: false)
-        //        }
-        
-        NavigationView{
             ScrollView{
-                ForEach(PokemonViewModel.all){pokemon in
+                ForEach(store.appState.pokemonList.allPokemonsByID){pokemon in
                     PokemonInfoRow(model: pokemon, expanded: false)
                 }
             }
@@ -24,8 +22,7 @@ struct PokemonList: View {
 //                Spacer()
 //                PokemonInfoPanel(model: .sample(id: 1))
 //            }.edgesIgnoringSafeArea(.bottom))
-                .navigationBarTitle("宝可梦列表")
-        }
+                
     }
 }
 

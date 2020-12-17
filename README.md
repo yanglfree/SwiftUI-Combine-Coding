@@ -172,4 +172,5 @@ extension View {
     }
 ```
 
-
+效果如下：
+![WX20201217-151043.png](http://ww1.sinaimg.cn/mw690/006WHNMxgy1glqvguzqr2j30cn0oojyw.jpg)

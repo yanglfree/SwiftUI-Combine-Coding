@@ -174,3 +174,59 @@ extension View {
 
 效果如下：
 ![WX20201217-151043.png](http://ww1.sinaimg.cn/mw690/006WHNMxgy1glqvguzqr2j30cn0oojyw.jpg)
+
+## 响应式异步编程
+
+- 异步编程的本质是响应未来的事件流
+- 异步操作中，某个事件发生时，将这个事件和与其相关的数据“发布”出来。对这个事件感兴趣的代码可以订阅这个事件，来进行后续的操作。
+- 用户界面只是状态的函数, View = f(State)
+- 将状态变化看做是被发布出来的异步操作的事件，订阅这个事件，即为SwiftUI的根据状态更新和绘制View的代码
+- 需要对事件数据进行某个操作
+
+## Combine基础
+
+![image-20201217173409735.png](http://ww1.sinaimg.cn/mw690/006WHNMxgy1glqzk1ixuoj30jp05iwf8.jpg)
+
+combine中有三种重要角色：
+
+- 负责发布事件的Publisher
+- 负责订阅事件的Subscriber
+- 负责转换事件和数据的Operator
+
+### Publisher
+
+在 Combine 中，我们使用 Publisher 协议来代表事件的发布者。Swift 提倡使用面 向协议编程的方式，Combine 中包括 Publisher 在内的一系列角色都使用协议来进 行定义，也正是这一思想的具体体现。
+
+publisher的定义
+
+```swift
+public protocol Publisher {
+
+associatedtype Output
+associatedtype Failure : Error
+
+func receive<S>(subscriber: S) where
+    S : Subscriber,
+    Self.Failure == S.Failure,
+    Self.Output == S.Input
+}
+```
+
+Publisher最主要的工作其实有两个：
+
+- 发布新的事件及其数据
+- 以及准备好被Subscribe订阅
+
+Publisher发布三种事件
+
+1. 类型为Output的新值： 代表事件流中出现了新的值
+2. 类型为Failure的错误：代表事件流中发生了问题，事件流到此终止。
+3. 完成事件：表示事件流中所有的元素都已经发布结束，事件流到此终止。
+
+### 有限事件流和无限事件流
+
+最终会终结的事件流称为有限事件流
+
+不会发出failure或者finished的事件流称为无限事件流
+
+

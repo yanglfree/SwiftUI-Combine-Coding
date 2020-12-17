@@ -68,3 +68,108 @@ struct ToolButtonModifier: ViewModifier {
       }
 ```
 
+## SwiftUI动画
+
+- 隐式动画 .animation(.default)
+
+  隐式动画作用范围很大，只要这个View甚至是它的子View上的可动画属性发生变化，这个动画就将适用。
+
+- 显式动画 .withAnimation{ self.expanded.toggle() }
+
+  可以将改变app状态的操作放在withAnimation的闭包中，由闭包中状态变化所触发的View变化，将以动画的形式呈现
+
+
+
+## 封装UIView
+
+SwiftUI中的UIViewRepresentable协议提供了封装UIView的功能
+
+这个协议要求实现两个方法：makeUIView（）、updateUIView（）
+
+```swift
+    public protocol UIViewRepresentable : View where Self.Body == Never {
+
+        /// The type of view to present.
+        associatedtype UIViewType : UIView
+
+        func makeUIView(context: Self.Context) -> Self.UIViewType
+
+        func updateUIView(_ uiView: Self.UIViewType, context: Self.Context)
+
+        static func dismantleUIView(_ uiView: Self.UIViewType, coordinator: Self.Coordinator)
+
+        associatedtype Coordinator = Void
+
+        func makeCoordinator() -> Self.Coordinator
+
+        typealias Context = UIViewRepresentableContext<Self>
+    }
+```
+
+以封装一个半透明效果的BlurView为例
+
+创建一个BlurView，实现UIViewRepresentable协议，实现其中的makeUIView(context: Context) -> **some** UIView 和updateUIView(**_** uiView: UIViewType, context: Context)方法，在这个例子中，只需要实现makeUIView这个方法即可，更新无需做任何操作。代码如下：
+
+```swift
+struct BlurView: UIViewRepresentable {
+    
+    let style: UIBlurEffect.Style
+    
+    func makeUIView(context: Context) -> some UIView {
+        
+        let view = UIView(frame: .zero)
+        view.backgroundColor = .clear
+        
+        let blurEffect = UIBlurEffect(style: style)
+        let blurView = UIVisualEffectView(effect: blurEffect)
+        
+        blurView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(blurView)
+        NSLayoutConstraint.activate([
+            blurView.heightAnchor.constraint(equalTo: view.heightAnchor),
+            blurView.widthAnchor.constraint(equalTo: view.widthAnchor)
+        ])
+        return view
+    }
+    
+    func updateUIView(_ uiView: UIViewType, context: Context) { }
+}
+```
+
+为了便于blurview的使用，创建一个extension方法
+
+```swift
+extension View {
+    func blurBackground(style: UIBlurEffect.Style) -> some View {
+        ZStack {
+            BlurView(style: style)
+            self
+        }
+    }
+}
+```
+
+使用：
+
+```swift
+    var body: some View {
+        VStack(spacing: 20) {
+            topIndicator
+            Header(model: model)
+            pokemonDescription
+            Divider()
+            AbilityList(model: model, abilityModels: abilities)
+        }
+        .padding(EdgeInsets(
+            top:12,
+            leading: 30,
+            bottom: 30,
+            trailing: 30
+        ))
+        .blurBackground(style: .systemMaterial) //使用毛玻璃效果
+        .cornerRadius(20)
+        .fixedSize(horizontal: false, vertical: true)
+    }
+```
+
+

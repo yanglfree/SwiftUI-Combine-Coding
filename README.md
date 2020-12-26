@@ -235,3 +235,18 @@ Publisher发布三种事件
 ## 响应式编程边界
 
 ## SwiftUI架构
+
+### SwiftUI的架构方式
+![WX20201227-011403@2x.png](http://ww1.sinaimg.cn/mw690/006WHNMxgy1gm1rhn835fj31200nydig.jpg)
+
+* app当做一个状态机，状态决定用户界面
+* 状态都保存在一个Store对象中
+* View不能直接操作State，而只能通过发送Action的方式，间接改变存储在Store中的State
+* Reducer接受原有的State和发送过来的Action，生成新的State
+* 用新的State替换Store中原有的状态，并用新状态来驱动更新界面
+
+SwiftUI中对传统的Redux架构进行了一些改变。
+- 除了通过Action外，还可以通过Binding来改变状态。
+- 在Reducer处理当前State和Action后，除了返回新State，再额外返回一个Command值，让Command来执行所需的副作用
+
+

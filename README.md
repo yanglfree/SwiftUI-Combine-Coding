@@ -249,4 +249,7 @@ SwiftUI中对传统的Redux架构进行了一些改变。
 - 除了通过Action外，还可以通过Binding来改变状态。
 - 在Reducer处理当前State和Action后，除了返回新State，再额外返回一个Command值，让Command来执行所需的副作用
 
-
+### 为什么选择单向数据流？
+* 防止View和Model耦合，解耦
+* 将AppStae的修改分散在app各处，很快将会难以维护
+* 方便测试

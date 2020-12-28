@@ -57,3 +57,19 @@ struct LogoutAppCommand: AppCommand {
         try? FileHelper.delete(from: .documentDirectory, fileName: "user.json")
     }
 }
+
+struct LoadPokemonsCommand: AppCommand {
+    func execute(in store: Store) {
+        let token = SubscriptionToken()
+        LoadPokemonRequest.all
+            .sink(receiveCompletion: { complete in
+                if case .failure(let error) = complete {
+                    store.dispatch(.loadPokemonDone(result: .failure(error)))
+                }
+                token.unseal()
+            }, receiveValue:{ value in
+                store.dispatch(.loadPokemonDone(result: .success(value)))
+            })
+            .seal(in: token)
+    }
+}

@@ -10,6 +10,17 @@ import Combine
 
 class Store: ObservableObject {
     @Published var appState = AppState()
+    var disposeBag = [AnyCancellable]()
+    
+    init() {
+        setupObservers()
+    }
+    
+    func setupObservers() {
+        appState.settings.checker.isEmailValid.sink { isValid in
+            self.dispatch(.emailValid(valid: isValid))
+        }.store(in: &disposeBag)
+    }
     
     static func reduce( action: AppAction, state: AppState) -> (AppState, AppCommand?) {
         var appState = state
@@ -40,6 +51,23 @@ class Store: ObservableObject {
         case .logout:
             appState.settings.loginUser = nil
             appCommand = LogoutAppCommand()
+        case .emailValid(let valid):
+            appState.settings.isEmailValid = valid
+        case .loadPokemons:
+            if appState.pokemonList.loadingPokemons {
+                break
+            }
+            appState.pokemonList.loadingPokemons = true
+            appCommand = LoadPokemonsCommand()
+            
+        case .loadPokemonDone(let result):
+            switch result {
+            case .success(let models):
+                appState.pokemonList.pokemons = Dictionary(uniqueKeysWithValues: models.map { ($0.id, $0) })
+            case .failure(let error):
+                print(error)
+                
+            }
         }
         return (appState, appCommand)
     }

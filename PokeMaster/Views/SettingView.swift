@@ -25,33 +25,30 @@ struct SettingView: View {
             
             if settings.loginUser == nil {
             
-                Picker("", selection: settingBinding.accountBehavior, content: {
-                    ForEach(AppState.Settings.AccountBehaivior.allCases, id: \.self) {
+                Picker("", selection: settingBinding.checker.accountBehavior, content: {
+                    ForEach(AppState.Settings.AccountBehavior.allCases, id: \.self) {
                         Text($0.text)
                     }
                 })
                 .pickerStyle(SegmentedPickerStyle())
                 
-                TextField("电子邮箱", text: settingBinding.email)
-                SecureField("密码", text: settingBinding.password)
-                     
+                TextField("电子邮箱", text: settingBinding.checker.email)
+                    .foregroundColor(settings.isEmailValid ? .green : .red)
+                SecureField("密码", text: settingBinding.checker.password)
+                
+                if settings.checker.accountBehavior == .register {
+                    SecureField("确认密码", text: settingBinding.checker.verifyPassword)
+                }
                 if settings.loginRequesting {
 //                    Text("登录中...")
                     YLActivityIndicatorView()
                     
                 } else {
-                    Button(settings.accountBehavior.text) {
+                    Button(settings.checker.accountBehavior.text) {
                         print("登录/注册")
-                        self.store.dispatch(.login(email: self.settings.email, password: self.settings.password))
+                        self.store.dispatch(.login(email: self.settings.checker.email, password: self.settings.checker.password))
                     }
                 }
-                
-                
-                if settings.accountBehavior == .register {
-                    SecureField("确认密码", text: settingBinding.verifyPassword)
-                }
-                
-
             } else {
                 Text(settings.loginUser!.email)
                 Button("注销") {
@@ -114,7 +111,7 @@ extension AppState.Settings.Sorting {
     }
 }
 
-extension AppState.Settings.AccountBehaivior {
+extension AppState.Settings.AccountBehavior {
     var text: String {
         switch self {
         case .register: return "注册"

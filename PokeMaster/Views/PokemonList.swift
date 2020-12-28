@@ -11,13 +11,14 @@ import SwiftUI
 struct PokemonList: View {
     
     @State var expandingIndex: Int?
+    @EnvironmentObject var store: Store
     
     var body: some View {
         ScrollView{
             
             SearchView()
             
-            ForEach(PokemonViewModel.all) { pokemon in
+            ForEach(store.appState.pokemonList.allPokemonsByID) { pokemon in
                 PokemonInfoRow(model: pokemon, expanded: self.expandingIndex == pokemon.id)
                     .onTapGesture {
                         withAnimation(.spring(response: 0.55, dampingFraction: 0.425, blendDuration: 0)){

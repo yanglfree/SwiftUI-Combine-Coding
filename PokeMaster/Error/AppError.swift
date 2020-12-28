@@ -14,6 +14,7 @@ enum AppError: Error, Identifiable {
         localizedDescription
     }
     case passwordWrong
+    case networkingFailed(Error)
 }
 
 extension AppError: LocalizedError {
@@ -21,6 +22,8 @@ extension AppError: LocalizedError {
         switch self {
         case .passwordWrong:
             return "密码错误"
+        case .networkingFailed(let error):
+            return error.localizedDescription
         }
     }
 }

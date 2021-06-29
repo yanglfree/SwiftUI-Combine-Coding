@@ -253,3 +253,8 @@ SwiftUI中对传统的Redux架构进行了一些改变。
 * 防止View和Model耦合，解耦
 * 将AppStae的修改分散在app各处，很快将会难以维护
 * 方便测试
+
+### 另一个版本的基于Redux的SwiftUI架构
+![redux](https://gitee.com/yanglfree/img/raw/master/test/three-ducks-redux-workflow-650x309.png
+)
+

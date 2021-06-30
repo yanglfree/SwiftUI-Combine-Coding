@@ -258,3 +258,193 @@ SwiftUI中对传统的Redux架构进行了一些改变。
 ![redux](https://gitee.com/yanglfree/img/raw/master/test/three-ducks-redux-workflow-650x309.png
 )
 
+## 用户体验和布局进阶
+
+### 自定义绘制和动画
+
+#### Path和Shape
+
+Shape协议是自定义绘制中最基本的部分
+
+```swift
+public protocol Shape : Animatable, View {
+
+	func path(in rect: CGRect) -> Path
+
+}
+```
+
+常用的一些形状都是Shape协议的具体实现，例如Circle、Rectangle
+
+自定义View，实现Shape协议中的path方法
+
+例子：实现下面这个自定义的图形
+
+![image-20210701002037071](https://gitee.com/yanglfree/img/raw/master/test/image-20210701002037071.png)
+
+```swift
+//TriangleArrow.swift
+
+import Foundation
+import SwiftUI
+
+struct TriangleArrow: Shape {
+    func path(in rect: CGRect) -> Path {
+        Path { path in
+            path.move(to: .zero)
+            
+            path.addArc(center: CGPoint(x: -rect.width / 5, y: rect.height / 2), radius: rect.width / 2, startAngle: .degrees(-45), endAngle: .degrees(45), clockwise: false)
+            
+            path.addLine(to: CGPoint(x: 0, y: rect.height))
+            path.addLine(to: CGPoint(x: rect.width, y: rect.height / 2))
+            
+            path.closeSubpath()
+        }
+    }
+}
+
+
+struct Demo: View {
+    var body: some View {
+        TriangleArrow()
+            .fill(Color.green)
+            .frame(width: 80, height: 80)
+    }
+}
+
+struct Demo_Previews: PreviewProvider {
+    static var previews: some View {
+        Demo()
+    }
+}
+```
+
+结果：
+
+
+
+![image-20210701002443673](https://gitee.com/yanglfree/img/raw/master/test/image-20210701002443673.png)
+
+#### Geometry Reader
+
+SwiftUI中，可以通过GeometryReader来读取parentView提供的一些信息。
+
+GeometryReader也是一个View，初始化方法传入一个ViewBuilder的闭包，用来构建被包装的View，这个闭包提供一个GeometryProxy的结构体
+
+GeometryReader的定义：
+
+```swift
+@available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
+@frozen public struct GeometryReader<Content> : View where Content : View {
+
+    public var content: (GeometryProxy) -> Content
+
+    @inlinable public init(@ViewBuilder content: @escaping (GeometryProxy) -> Content)
+
+    /// The type of view representing the body of this view.
+    ///
+    /// When you create a custom view, Swift infers this type from your
+    /// implementation of the required ``View/body-swift.property`` property.
+    public typealias Body = Never
+}
+```
+
+GeometryProxy:
+
+```swift
+@available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
+public struct GeometryProxy {
+
+    /// The size of the container view.
+    public var size: CGSize { get }
+
+    /// Resolves the value of `anchor` to the container view.
+    public subscript<T>(anchor: Anchor<T>) -> T { get }
+
+    /// The safe area inset of the container view.
+    public var safeAreaInsets: EdgeInsets { get }
+
+    /// Returns the container view's bounds rectangle, converted to a defined
+    /// coordinate space.
+    public func frame(in coordinateSpace: CoordinateSpace) -> CGRect
+}
+```
+
+proxy中有个size，可以获取container view的尺寸，这让我们可以按照尺寸自适应缩放构建UI。
+
+
+
+#### Animatable Data
+
+
+
+### 布局和对齐
+
+#### 布局规则
+
+##### SwiftUI布局流程
+
+总体：协商解决，层层上报
+
+具体规则：
+
+父层级的View根据某种规则，向子View“提议”一个可行的尺寸；
+
+子View以这个尺寸为参考，按照自己的需求进行布局：
+
+或占满所有可能的尺寸（比如Rectangle和Circle），
+
+或按照自己要显示的内容确定新的尺寸（比如Text），
+
+或把这个任务再委托给自己的子View继续进行布局（比如各类StackView）。
+
+在子View确定自己的尺寸后，将这个需要的尺寸汇报回父View，
+
+父View最后把这个确定好尺寸的子View放置在坐标系合适的位置上。
+
+
+
+Text并不“盲目”遵守自身内容的尺寸，而是会更多地尊重提案的尺寸，通过换行或是把内容省略为“...”来修改内容，去尽量满足提案。
+
+#### 布局优先级
+
+通过.layoutPriority，可以控制计算布局的优先级，让父View优先对某个字View进行考虑和提案。默认情况下，布局优先级都是0，传一个更大的值就可以提高优先级。
+
+```swift
+  HStack(alignment: .center) {
+            
+            Image(systemName: "person.circle")
+                .background(Color.yellow)
+            Text("User:")
+                .background(Color.red)
+            Text("onevcat | Wei Wang")
+                .layoutPriority(1)
+                .background(Color.green)
+
+        }
+        .lineLimit(1)
+        .frame(width: 200)
+        .background(Color.purple)
+```
+
+![image-20210701005556435](https://gitee.com/yanglfree/img/raw/master/test/image-20210701005556435.png)
+
+#### 强制固定尺寸
+
+fixedSize，这个modifier将提示布局系统忽略掉外界条件，让被修饰的View使用它在无约束下原本应有的理想尺寸
+
+#### Frame
+
+将fixedSize跟frame两个modifier调换顺序，布局和不加fixedSize的时候完全一致。
+
+因为大部分View modifier所做的，并不是“改变”View上的某个属性，而是“用一个带有相关属性的新View来包装原有的View”。
+
+frame 也不例外： 它并不是将所作用的 View 的尺寸进行更改，而是新创建一个 View，并强制地用指 定的尺寸，对其内容 (其实也就是它的子 View) 进行提案。这也是为什么将 fixedSize 写在 frame 之后会变得没有效果的原因：因为 frame 这个 View 的理想尺寸就是宽 度 200，它已经是按照原本的理想尺寸进行布局了，再用 fixedSize 包装也不会带来 任何改变。
+
+frame方法的两种版本里，所有的参数都有默认值nil，如果使用默认值，那么frame将不在这个方向上改变原有的尺寸提案，而是将它直接传递给子View
+
+frame中不设置width的情况下，只使用对齐，对齐将不会生效，因为内容已经占满了frame的全部空间，内容已经贴边，使用哪种对齐没有意义。
+
+#### Alignment Guide
+
+
